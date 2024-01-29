@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block page %}
+
+    <div class="type-container custom-container">
+            <a class="btn btn-primary" type="button" href="{% url 'branchTest' %}">Branş Denemesi</a>
+            <a class="btn btn-primary" type="button" href="{% url 'areaTestAyt' %}">Ayt</a>
+            <a href="{% url 'areaTestTyt' %}" class="btn btn-primary" type="button">Tyt</a>
+        <a href="http://universitetercihleri.com/yks-tyt-ayt-puan-hesap" target="blank" class="btn btn-primary" type="button">Puan Öğrenmek İçin</a>
+    </div>
+
+
+
+    <table class="table table-light table-bordered table-hover mt-4 test-table" id="question-table">
+        <thead class="bg-primary text-light">
+          <tr>
+            <th>Area</th>
+            <th>Adı</th>
+            <th>Matematik (40) <span>D|Y|B|N</span></th>
+            <th>Fizik (14) <span>D|Y|B|N</span></th>
+            <th>Kimya (13) <span>D|Y|B|N</span></th>
+            <th>Biyoloji (13) <span>D|Y|B|N</span></th>
+            <th>Doğru Soru</th>
+            <th>Yanlış Soru</th>
+            <th>Boş Soru</th>
+            <th>Net Soru</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for test in area_tests %}
+            {% if test.visible == True %}
+          <tr class="border-bottom border-danger" title="{{ test.get_science }}{{ test.get_date }}">
+            <td>{{ test.area }}</td>
+            <td>{{ test.get_title }}</td>
+            {% for branch_test in branch_tests %}
+              {% if branch_test.area_test == test %}
+                <td>{{ branch_test.true_question }} | {{ branch_test.false_question }} | {{ branch_test.get_blank_question }} | {{ branch_test.get_clear_question }}</td>
+              {% endif %}
+            {% endfor %}
+            {% for info in test.get_total_infos %}
+            <td>{{ info }}</td>
+            {% endfor %}
+          </tr>
+            {% endif %}
+          {% endfor %}
+          <tr class="col-mean-ayt">
+            <td>Tyt</td>
+            <td>Ortalama</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    
+
+    <script src="{% static 'test_tracker_ayt.js' %}"></script>
+
+{% endblock %}

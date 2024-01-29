@@ -1,0 +1,223 @@
+{% extends 'layout.html' %}
+<!-- prettier-ignore -->
+{% block page %}
+<div style="display: none;">
+	{% if selected_area %}
+		{{ selected_area }}
+	{% endif %}
+
+</div>
+<div class="container mt-5">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="filters my-3">
+				<form action="{% url 'filterSubject' %}" class="bg-primary p-2" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<select name="area" id="area" class="form-control">
+							<option value="">Alan Seçiniz</option>
+							{% for area in areas %}
+							<option value='{{ area.id }}'>{{ area.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<select name="class" id="class" class="form-control">
+							<option value="" selected>Sınıf Seçiniz</option>
+							{% for class in classes %}
+							<option value="{{ class.id }}">{{ class.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<select id="lesson" name="lesson" class="form-control">
+							<option value="" selected>Ders Seçiniz</option>
+							{% for lesson in lessons %}
+							<option value="{{ lesson.id }}">{{ lesson.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-success">Filtrele</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="panel panel-default">
+				<table class="table table-light table-hover table-condensed" id="question-table" data-id="subject">
+					<thead class="bg-primary text-light">
+						<tr>
+							<th>Tyt / Ayt</th>
+							<th>Sınıf</th>
+							<th>Ders</th>
+							<th>Konu Adı</th>
+							<th>Durum</th>
+							<th>Edit / Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for subject in subjects %} 
+							{% if subject.parent == None %}
+								<tr class="{% if subject.status == 'False' %}false-todo{% else %}true-todo{% endif %} main-subject">
+									<td>{{ subject.area }}</td>
+									<td>{{ subject.clas }}</td>
+									<td>{{ subject.lesson }}</td>
+									<td>{{ subject.get_title }}</td>
+									<td>
+										{% if subject.status == "False" %}
+										<a class="btn" href="{% url 'changeStatusSubject' subject.id %}">
+											<i class="fas fa-times text-danger"></i>
+										</a>
+										{% else %}
+										<a class="btn" href="{% url 'changeStatusSubject' subject.id %}">
+											<i class="fas fa-check text-success"></i>
+										</a>
+										{% endif %}
+									</td>
+									<td>
+										<a
+											href="{% url 'deleteSubject' subject.id %}"
+											class="btn btn-danger ml-2"
+											data-id="{{ subject.id }}"
+											id="delete-subject"
+										>
+											<i class="fas fa-trash"></i>
+										</a>
+									</td>
+									<td class="accordion-button">
+										<button class="btn btn-primary accordion-toggle" data-toggle="collapse" data-target="#accordion{{ subject.id }}">
+											<i class="fas fa-chevron-down"></i>
+										</button>
+									</td>
+								</tr>
+							{% endif %} 
+						
+							{% for subsubject in subject.children.all %}
+								<tr class="hiddenRow subsubject">
+									<td colspan="6">
+										<div class="accordion-body collapse" id="accordion{{ subject.id }}">
+											<table
+												class="table table-condensed w-100 m-auto"
+												style="border-collapse: collapse"
+											>
+												{% if subsubject.children.all %}
+													<tr class="{% if subsubject.status == 'False' %}false-todo{% else %}true-todo{% endif %} sub-subject">
+														<td>{{ subsubject.area }}</td>
+														<td>{{ subsubject.clas }}</td>
+														<td>{{ subsubject.lesson }}</td>
+														<td>{{ subsubject.get_name }}</td>
+														<td>
+															{% if subsubject.status == "False" %}
+															<a class="btn" href="{% url 'changeStatusSubject' subsubject.id %}">
+																<i class="fas fa-times text-danger"></i>
+															</a>
+															{% else %}
+															<a class="btn" href="{% url 'changeStatusSubject' subsubject.id %}">
+																<i class="fas fa-check text-success"></i>
+															</a>
+															{% endif %}
+														</td>
+														<td>
+															<a
+																href="{% url 'deleteSubject' subsubject.id %}"
+																class="btn btn-danger ml-2"
+																data-id="{{ subsubject.id }}"
+																id="delete-subject"
+															>
+																<i class="fas fa-trash"></i>
+															</a>
+														</td>
+														<td class="accordion-button">
+															<button class="btn btn-primary accordion-toggle" data-toggle="collapse" data-target="#accordionsub{{ subsubject.id }}">
+																<i class="fas fa-chevron-down"></i>
+															</button>
+														</td>
+													</tr>
+
+													{% for subsubject2 in subsubject.children.all %}
+														<tr class="hiddenRow subsubject2">
+															<td colspan="6">
+																<div class="accordion-body collapse" id="accordionsub{{ subsubject.id }}">
+																	<table
+																		class="table table-condensed w-100 m-auto"
+																		style="border-collapse: collapse"
+																	>
+																	<tr class=" {% if subsubject2.status == 'False' %}false-todo{% else %}true-todo{% endif %} sub-subject2">
+																		<td>{{ subsubject2.area }}</td>
+																		<td>{{ subsubject2.clas }}</td>
+																		<td>{{ subsubject2.lesson }}</td>
+																		<td>{{ subsubject2.get_name }}</td>
+																		<td>
+																			{% if subsubject2.status == "False" %}
+																			<a class="btn" href="{% url 'changeStatusSubject' subsubject2.id %}">
+																				<i class="fas fa-times text-danger"></i>
+																			</a>
+																			{% else %}
+																			<a class="btn" href="{% url 'changeStatusSubject' subsubject2.id %}">
+																				<i class="fas fa-check text-success"></i>
+																			</a>
+																			{% endif %}
+																		</td>
+																		<td>
+																			<a
+																				href="{% url 'deleteSubject' subsubject2.id %}"
+																				class="btn btn-danger ml-2"
+																				data-id="{{ subsubject2.id }}"
+																				id="delete-subject"
+																			>
+																				<i class="fas fa-trash"></i>
+																			</a>
+																		</td>
+
+																	</tr>
+																	</table>
+																</div>
+															</td>
+														</tr>
+													{% endfor %}
+												
+												{% else %}
+													<tr
+														class=" {% if subsubject.status == 'False' %}false-todo{% else %}true-todo{% endif %} sub-subject"
+													>
+														<td>{{ subsubject.area }}</td>
+														<td>{{ subsubject.clas }}</td>
+														<td>{{ subsubject.lesson }}</td>
+														<td>{{ subsubject.get_name }}</td>
+														<td>
+															{% if subsubject.status == "False" %}
+															<a class="btn" href="{% url 'changeStatusSubject' subsubject.id %}">
+																<i class="fas fa-times text-danger"></i>
+															</a>
+															{% else %}
+															<a class="btn" href="{% url 'changeStatusSubject' subsubject.id %}">
+																<i class="fas fa-check text-success"></i>
+															</a>
+															{% endif %}
+														</td>
+														<td>
+															<a
+																href="{% url 'deleteSubject' subsubject.id %}"
+																class="btn btn-danger ml-2"
+																data-id="{{ subsubject.id }}"
+																id="delete-subject"
+															>
+																<i class="fas fa-trash"></i>
+															</a>
+														</td>
+													</tr>
+												{% endif %}
+											</table>
+										</div>
+									</td>
+								</tr>
+							{% endfor %} 
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

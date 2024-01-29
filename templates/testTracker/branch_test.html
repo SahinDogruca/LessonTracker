@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block page %}
+
+  <div class="type-container">
+    <a class="btn btn-primary" type="button" href="{% url 'branchTest' %}">Branş Denemesi</a>
+    <a class="btn btn-primary" type="button" href="{% url 'areaTestAyt' %}">Ayt</a>
+    <a href="{% url 'areaTestTyt' %}" class="btn btn-primary" type="button">Tyt</a>
+  </div>
+  <div class="period-container mt-3 test-container">
+		<form action="{% url 'filterTestBranch' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-row test-form-row">
+        <div class="form-group mr-5">
+          <select name="lesson" class="form-control">
+            <option value="empty">Ders Seçiniz</option>
+            {% for lesson in lessons %}
+            <option value="{{ lesson.id }}">{{ lesson.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">Filtrele</button>
+        </div>
+      </div>
+    </form>
+	</div>
+  
+  
+
+  <table class="table table-light table-bordered table-hover mt-4 test-table" id="question-table">
+    <thead class="bg-primary text-light">
+      <tr>
+        <th>Tyt / Ayt</th>
+        <th>Sınıf</th>
+        <th>Ders</th>
+        <th>Adı</th>
+        <th>Soru Sayısı</th>
+        <th>Doğru Sayısı</th>
+        <th>Yanlış Sayısı</th>
+        <th>Boş Sayısı</th>
+		<th>Net Sayısı</th>
+        <th>Tarih</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for test in tests %}
+      <tr class="border-bottom border-danger">
+        <td>{{ test.area }}</td>
+        <td>{{ test.clas }}</td>
+        <td>{{ test.lesson }}</td>
+        <td>{{ test.get_title }}</td>
+        <td>{{ test.total_question }}</td>
+        <td>{{ test.true_question }}</td>
+        <td>{{ test.false_question }}</td>
+        <td>{{ test.get_blank_question }}</td>
+		<td>{{ test.get_clear_question }}</td>
+        <td>{{ test.get_date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
+{% endblock %}

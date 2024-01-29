@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block page %}
+<div class="container">
+  <form id="calc-score-form" class="w-50 mx-auto mt-5">
+    <div class="form-group">
+      <label for="tyt_score">Lütfen Tyt Ham puanınızı giriniz</label>
+      <input type="text" id="tyt_score" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="ayt_score">Lütfen Ayt Ham Puanınızı giriniz</label>
+    <input type="text" id="ayt_score" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="diploma_score">Lütfen diploma puanınızı giriniz</label>
+      <input type="text" id="diploma_score" class="form-control">
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary" type="button">Tıkla</button>
+      <div id="result" class="pl-5">Puan : </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  tytScore = document.querySelector("#tyt_score")
+  aytScore = document.querySelector("#ayt_score")
+  diploma = document.querySelector("#diploma_score")
+  result = document.querySelector("#result")
+  button = document.querySelector(".btn")
+
+  button.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (tytScore.value != "" && aytScore.value != "" && diploma.value != "") {
+          if (tytScore.value >= 0 && tytScore.value <= 500) {
+              if (aytScore.value >= 0 && aytScore.value <= 500) {
+                  if (diploma.value <= 100 && diploma.value >= 0) {
+                      let toplam = (tytScore.value * 0.4) + (aytScore.value * 0.6) + (diploma.value * 0.6);
+                      result.textContent = "Puan : " + toplam;
+                  } else result.textContent = "Lütfen Diploma notu alanına geçerli değerler giriniz."
+              } else result.textContent = "Lütfen Ayt Puan alanına geçerli değerler giriniz."
+          } else result.textContent = "Lütfen tyt Puanı alanına geçerli değerler giriniz"
+      } else result.textContent = "Lütfen tüm alanları doldurunuz"
+  })
+</script>
+{% endblock %}

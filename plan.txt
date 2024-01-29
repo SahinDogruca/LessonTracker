@@ -1,0 +1,48 @@
+olacak özellikler
+
+  - Soru Takip
+  - Günlük todo
+  - Konu Takip
+
+Ana Sayfa Uygulamasi Arayüz Planı
+
+  Navbar Planı 
+
+  Mavi Primary bir navbarın sol tarafta dersler ile ilgili ikon ve yanında Lesson Tracker yazısı
+  ekranın sağ tarafında ise Özellikler yer alacaktır 
+
+  Ana sayfa içeriği ilerleyen günlerde belirlenecektir.
+
+
+
+Soru Takip Uygulaması Veri tabanı
+
+  question
+    -- tyt mi ayt mi
+    -- sınıf
+    -- ders
+    -- konu
+    -- soru sayısı
+    -- date
+  
+  class
+    -- name
+  
+  lesson
+    -- name
+
+  subject
+    -- name
+
+
+Soru Takip Uygulamasi Arayüz Planı
+
+  ekranda bir liste şeklinde o gün (default olarak) çözülen sorular yer alıcak.
+  sorular (( Tyt/ayt | sınıf | ders | konu | soru sayısı | edit | delete )) listelenecek
+  listenin sağ alt kısmından yeni ekle tuşu yer alıcak
+
+  listenin üstünde ise (( yıllık | aylık | haftalık | günlük )) filtreler DAha Sonra ise (( tyt/ ayt | sınıf | ders | konu )) filtreleri yer alacaktır
+
+  filtreler kısmının hemen altında günlük hedef soru sayısı yer alacaktır.
+
+  listenin sol altında filtrelere göre toplam soru sayısı yer alacaktır.

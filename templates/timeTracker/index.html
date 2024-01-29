@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+<!-- prettier-ignore -->
+{% block page %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="filters my-3">
+				<form action="{% url 'filterTime' %}" class="bg-primary p-3" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<select name="date" id="date" class="form-control">
+							<option value="year" selected>Bu Yıl</option>
+							<option value="month">Bu Ay</option>
+							<option value="week">Bu Hafta</option>
+							<option value="day">Bu Gün</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-success">Filtrele</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<table class="table mt-3" id="time-table">
+				<thead>
+					<tr>
+						<th class="w-50">Başlık</th>
+						<th>Saat</th>
+						<th>Dakika</th>
+						<th>Tarih</th>
+						<th>Edit / Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for time in times %}
+					<tr title="{{ time.get_title }}" data-id="{{ time.get_time }}">
+						<td>{{ time.get_title }}</td>
+						<td>{{ time.hour }}</td>
+						<td>{{ time.minute }}</td>
+						<td>{{ time.get_formatted_date }}</td>
+						<td>
+							<a class="btn btn-warning" href="{% url 'editTime' time.id %}">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+							<a class="btn btn-danger" href="{% url 'deleteTime' time.id %}">
+								<i class="fas fa-trash"></i>
+							</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="bottom-area mt-3">
+				<p>Toplam Çalışılan Süre : <span class="font-weight-bold time-total"></span></p>
+				<a type="button" class="btn btn-success float-right" id="" href="{% url 'addTime' %}"
+					>Ekle</a
+				>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock%}

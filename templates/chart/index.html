@@ -1,0 +1,12 @@
+{% extends 'layout.html' %} {% block page %}
+<div class="container">
+	<div class="type-container">
+		<a class="btn btn-primary" type="button" href="{% url 'questionChartOfWeek' %}">Soru Sayısı</a>
+		<a href="" class="btn btn-primary" type="button">Ders Çalışma Süresi</a>
+	</div>
+	<div class="period-container">
+		<a class="btn btn-primary" type="button" href="{% url 'questionChartOfWeek' %}">Haftalık</a>
+		<a href="" class="btn btn-primary" type="button">Aylık</a>
+	</div>
+</div>
+{% endblock %}

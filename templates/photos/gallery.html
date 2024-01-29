@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block page %}
+<div class="row mt-5 mb-5" style="width:2000px;position:absolute;left:5px;">
+    <div class="col-md-2 mt-5">
+        <div class="card">
+            <div class="card-header" style="color: #d1d1d1; font-size: 20px;">
+                Filters <span class="float-right">{{ photo_length }} soru</span>
+            </div>
+            
+               
+                <form method="get" style="color: black;">
+                    <div class="form-row">
+                        <label for="inputEmail4" class="col-form-label">Başlık</label>
+                        {{ photofilter.title }}
+                    </div>
+                    <div class="form-row">
+                        <label for="inputEmail4" class="col-form-label">Alan</label>
+                        {{ photofilter.area }}
+                    </div>
+                    <div class="form-row">
+                        <label for="inputEmail4" class="col-form-label">Ders</label>
+                        {{ photofilter.lesson }}
+                    </div>
+                    <div class="form-row">
+                        <label for="inputEmail4" class="col-form-label">Durum</label>
+                        {{ photofilter.status }}
+                    </div>
+					<div class="form-row" hidden>
+                        <label for="inputEmail4" class="col-form-label">Açık</label>
+                        {{ photofilter.description }}
+                    </div>
+
+                    <button class="btn btn-primary float-right mr-2" type="submit">Search</button>
+                </form>
+            
+                <a href="{% url 'addPhoto' %}" class="btn btn-dark btn-block btn-sm m-1" style="width: 240px;">Add Photo</a>
+            
+        </div>
+
+    </div>
+    <div class="col-md-10 mt-5">
+        <div class="row mt-5">
+
+            {% for photo in page.object_list %}
+            <div class="col-md-2 mt-4">
+                <div class="card my-2">
+
+           
+                        <img class="image-thumbail zoom" src="{{photo.image.url}}" alt="Card image cap">
+                  
+                    
+
+                    <div class="card-body" style="text-align: center;">
+                        <small style="color: black; font-size: 20px;">{{ photo.title }}</small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h3>No photos...</h3>
+            {% endfor %}
+
+
+
+
+
+
+
+
+        </div>
+        <div class="row mx-auto">
+
+
+            <div id="SayfalamaAlani" class="mt-5">
+                <!-- <div id="SayfalamaAlaniIciSayfaVeKayitSayisiAlani">Toplam <b>{{ page.paginator.num_pages }}</b> sayfada</div> -->
+                
+                <div id="SayfalamaNumaralandirmaAlani">
+                    
+                    <span class="SayfalamaNumaralandirmaPasif"><a href="
+                        {% if not 'status' in url %}
+                            {% if page.has_previous %}?page=1{% else %}#{% endif %}
+                        {% else %}
+                            {% if page.has_previous %}{{ url }}&page=1{% else %}#{% endif %}
+                        {% endif %}
+                        " target="_top"><img src="{% static 'Resimler/SayfalamaIlkSayfayaGit.png' %}" border="0" alt="" title=""></a></span>
+                    <span class="SayfalamaNumaralandirmaPasif"><a href="
+                        {% if not 'status' in url %}
+                            {% if page.has_previous %}?page={{ page.previous_page_number }}{% else %}#{% endif %}
+                        {% else %}
+                            {% if page.has_previous %}{{ url }}&page={{ page.previous_page_number }}{% else %}#{% endif %}
+                        {% endif %}
+                        
+                        " target="_top"><img src="{% static 'Resimler/SayfalamaBirGeriGit.png' %}" border="0" alt="" title=""></a></span>
+
+                    {% for pg in page_range %}
+                        {% if page.number == pg %}
+                            {% if not 'status' in url %}
+                                <span class="SayfalamaNumaralandirmaAktif"><a href="?page={{ pg }}" target="_top">{{ pg }}</a></span>
+                            {% else %}
+                                <span class="SayfalamaNumaralandirmaAktif"><a href="{{ url }}&page={{ pg }}" target="_top">{{ pg }}</a></span>
+                            {% endif %}
+                        {% else %}
+                            {% if not 'status' in url %}
+                                <span class="SayfalamaNumaralandirmaPasif"><a href="?page={{ pg }}" target="_top">{{ pg }}</a></span>
+                            {% else %}
+                                <span class="SayfalamaNumaralandirmaPasif"><a href="{{ url }}&page={{ pg }}" target="_top">{{ pg }}</a></span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <span class="SayfalamaNumaralandirmaPasif"><a href="
+                        {% if not 'status' in url %}
+                            {% if page.has_next %}?page={{ page.next_page_number }}{% else %}#{% endif %}
+                        {% else %}
+                            {{ url }}{% if page.has_next %}&page={{ page.next_page_number }}{% else %}{% endif %}
+                        {% endif %}
+                        " target="_top"><img src="{% static 'Resimler/SayfalamaBirIleriGit.png' %}" border="0" alt="" title=""></a></span>
+                    <span class="SayfalamaNumaralandirmaPasif"><a href="
+                        {% if not 'status' in url %}
+                            {% if page.has_next %}?page={{ page.paginator.num_pages }}{% else %}#{% endif %}
+                        {% else %}
+                            {{ url }}{% if page.has_next %}&page={{ page.paginator.num_pages }}{% else %}#{% endif %}
+                        {% endif %}
+                        " target="_top"><img src="{% static 'Resimler/SayfalamaSonSayfayaGit.png' %}" border="0" alt="" title=""></a></span>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'layout.html' %} {% block page %}
+<div class="container-sm mt-5">
+	<div class="form-box">
+		<div class="card">
+			<div class="card-header bg-primary text-light text-center rounded">
+				<h4 class="card-title">Soru Kayıt Formu</h4>
+			</div>
+			<div class="card-body">
+				<form action="{% url 'editSubject' subject.id %}" method="POST">
+					{% csrf_token %}
+					<div class="row">
+						<div class="col">
+							<div class="form-group">
+								<select name="area" class="form-control">
+									<option value="">Select Area</option>
+									{% for area in areas %}
+									<!-- prettier-ignore -->
+									{% if area == subject.area %}
+									<option value="{{ area.id }}" selected>{{ area.name }}</option>
+									{% else %}
+									<option value="{{ area.id }}">{{ area.name }}</option>
+									<!-- prettier-ignore -->
+									{% endif %}
+									{% endfor %}
+								</select>
+							</div>
+							<div class="form-group">
+								<select name="class" id="" class="form-control">
+									<option value="">Select Class</option>
+									{% for class in classes %}
+									<!-- prettier-ignore -->
+									{% if class == subject.clas %}
+									<option value="{{ class.id }}" selected>{{ class.name }}</option>
+									{% else %}
+									<option value="{{ class.id }}">{{ class.name }}</option>
+									<!-- prettier-ignore -->
+									{% endif %}
+									{% endfor %}
+								</select>
+							</div>
+							<div class="form-group">
+								<select name="lesson" id="" class="form-control">
+									<option value="">Select Lesson</option>
+									{% for lesson in lessons %}
+									<!-- prettier-ignore -->
+									{% if lesson == subject.lesson %}
+									<option value="{{ lesson.id }}" selected>{{ lesson.name }}</option>
+									{% else %}
+									<option value="{{ lesson.id }}">{{ lesson.name }}</option>
+									<!-- prettier-ignore -->
+									{% endif %}
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<div class="form-group">
+								<input
+									type="text"
+									name="name"
+									class="form-control"
+									placeholder="İsim"
+									value="{{ subject.title }}"
+								/>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col">
+							<div class="form-group float-right">
+								<a type="button" class="btn btn-secondary" href="{% url 'backToSubject' %}"
+									>İptal Et</a
+								>
+								<button type="submit" class="btn btn-primary">Kaydet</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

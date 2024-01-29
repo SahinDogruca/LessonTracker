@@ -1,0 +1,80 @@
+{% extends 'layout.html' %} {% block page %}
+
+<div class="container">
+	<div class="type-container">
+		<a class="btn btn-primary" type="button" href="{% url 'questionChartOfWeek' %}">Soru Sayısı</a>
+		<a href="{% url 'timeChartOfWeek' %}" class="btn btn-primary" type="button"
+			>Ders Çalışma Süresi</a
+		>
+	</div>
+	<div class="period-container mt-3">
+		<a class="btn btn-primary" type="button" href="{% url 'timeChartOfWeek' %}">Haftalık</a>
+		<div class="lead text-white font-weight-bold">{{ date }}</div>
+		<a href="{% url 'timeChartOfMonth' %}" class="btn btn-primary" type="button">Aylık</a>
+	</div>
+</div>
+
+<canvas
+	id="month-time-chart"
+	width="1100"
+	height="700"
+	class="mt-3"
+	data-url="{% url 'timeCountMonth' %}"
+></canvas>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+	$(document).ready(function () {
+		var $questionCount = $("#month-time-chart");
+		$.ajax({
+			method: "GET",
+			url: $questionCount.data("url"),
+			success: function (data) {
+				console.log(data);
+				var ctx = $questionCount[0].getContext("2d");
+
+				new Chart(ctx, {
+					type: "line",
+					data: {
+						labels: data.labels,
+						datasets: [
+							{
+								label: "Dakika",
+								data: data.data,
+								borderColor: "red",
+								backgroundColor: "transparent",
+							},
+						],
+					},
+					options: {
+						elements: {
+							line: {
+								tension: 0.3,
+							},
+						},
+						responsive: true,
+						legend: {
+							position: "top",
+						},
+						interaction: {
+							intersect: false,
+						},
+						plugins: {
+							filler: {
+								propagate: false,
+							},
+						},
+						title: {
+							display: true,
+							text: "Ders Çalışma Süresi Grafiği",
+						},
+					},
+				});
+			},
+			error: function (error_data) {
+				console.log(error_data);
+			},
+		});
+	});
+</script>
+{% endblock %}
